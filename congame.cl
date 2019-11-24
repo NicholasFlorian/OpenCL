@@ -1,4 +1,4 @@
-__kernel void CGM_update(__global int* virtualMap[24], __global int* updateMap[24]){
+__kernel void CGM_update(__global int* virtualMap, __global int* updateMap){
 
     // index variables for OpenCL assignment
     int x;
@@ -6,7 +6,7 @@ __kernel void CGM_update(__global int* virtualMap[24], __global int* updateMap[2
 
     // variables 
     int count; 
-    int matrix[8][2] {{-1,-1}, { 0,-1}, { 1,-1}, {-1, 0}, { 1, 0}, {-1, 1}, { 0, 1}, { 1, 1}};
+    int matrix[8][2] = {{-1,-1}, { 0,-1}, { 1,-1}, {-1, 0}, { 1, 0}, {-1, 1}, { 0, 1}, { 1, 1}};
     
     
     // assign

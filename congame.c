@@ -70,7 +70,7 @@ int MATRIX[MATRIX_SIZE][MATRIX_DEPTH] = {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // utility code
-int CGM_checkPosition(int** map, int xMax, int yMax, int xPos, int yPos){
+int CGM_checkPosition(int* map, int xMax, int yMax, int xPos, int yPos){
 
     if(xPos >= xMax || xPos < 0)
         return 0;
@@ -81,7 +81,7 @@ int CGM_checkPosition(int** map, int xMax, int yMax, int xPos, int yPos){
     return 1;
 }
 
-int CGM_pullPosition(int** map, int xMax, int yMax, int xPos, int yPos){
+int CGM_pullPosition(int* map, int xMax, int yMax, int xPos, int yPos){
 
     if(xPos >= xMax || xPos < 0)
         return CGM_EMPTIED;
@@ -89,18 +89,18 @@ int CGM_pullPosition(int** map, int xMax, int yMax, int xPos, int yPos){
     if(yPos >= yMax || yPos < 0)
         return CGM_EMPTIED;
 
-    return map[xPos][yPos];
+    return map[(xPos * 24) + yPos];
 }
 
-void CGM_clearMap(int** map, int xMax, int yMax){
+void CGM_clearMap(int* map, int xMax, int yMax){
 
     // go through the entire map and assign all values to 0;
     for(int x = 0; x < xMax; x++)
         for(int y = 0; y < yMax; y++)
-            map[x][y] = CGM_EMPTIED;  // assign to 0
+            map[(xPos * 24) + yPos] = CGM_EMPTIED;  // assign to 0
 }
 
-void CGM_randomizeMap(int** map, int xMax, int yMax){
+void CGM_randomizeMap(int* map, int xMax, int yMax){
 
     // go through the entire map and randomly assign values
     for(int x = 0; x < xMax; x++){
@@ -108,13 +108,13 @@ void CGM_randomizeMap(int** map, int xMax, int yMax){
         for(int y = 0; y < yMax; y++) {
 
             // 17% chance the result is a 1
-            map[x][y] = (rand() % 100) < 17; 
+            map[(xPos * 24) + yPos] = (rand() % 100) < 17; 
             
             // if it is a 1, let there be a 35% that the neighbor is a 1
-            if(map[x][y]) {
+            if(map[(xPos * 24) + yPos]) {
 
                 // go through each neighbor
-                for(int i = 0; i < MATRIX_SIZE; i++) {
+                /***TODO for(int i = 0; i < MATRIX_SIZE; i++) {
     
                     // verify the location to prevent segfault...
                     if(CGM_checkPosition(
@@ -128,13 +128,13 @@ void CGM_randomizeMap(int** map, int xMax, int yMax){
                         map[x + MATRIX[i][0]][y + MATRIX[i][1]] = 
                             (rand() % 100) < 35;
                     }
-                }
+                }*/
             }
         }
     }
 }
 
-void CGM_drawMap(int** map, int xMax, int yMax){
+void CGM_drawMap(int* map, int xMax, int yMax){
 
     // update max screen size
     getmaxyx(stdscr, CurrentY, CurrentX);
@@ -143,7 +143,7 @@ void CGM_drawMap(int** map, int xMax, int yMax){
     // go through the entire map and print evey
     for(int x = 0; x < xMax; x++)
         for(int y = 0; y < yMax; y++)
-            if(map[x][y] == CGM_OCCUPIED) // print out populations
+            if(map[(xPos * 24) + yPos] == CGM_OCCUPIED) // print out populations
                 mvprintw(y, x * 2, CGM_STR_OCCUPIED);
             else
                 mvprintw(y, x * 2, CGM_STR_EMPTIED);
@@ -253,8 +253,8 @@ int main(int argc, char *argv[]) {
     cl_mem              updateMapBuffer;
 
     // data variables
-    int**               virtualMap;
-    int**               updateMap;
+    int*                virtualMap;
+    int*                updateMap;
     int                 xMax;
     int                 yMax;
 
@@ -267,13 +267,9 @@ int main(int argc, char *argv[]) {
     yMax = MAX_Y;
 
     // allocate memory for our arrays
-    virtualMap = malloc(sizeof(int*) * xMax);
-    for(int i = 0; i < xMax; i++)
-        virtualMap[i] = malloc(sizeof(int) * yMax);
+    virtualMap = malloc(sizeof(int*) * xMax * yMax);
 
-    updateMap = malloc(sizeof(int*) * xMax);
-    for(int i = 0; i < xMax; i++)
-        updateMap[i] = malloc(sizeof(int) * yMax);
+    updateMap = malloc(sizeof(int*) * xMax * yMax);
 
     // create an empty map and randomly fill it up
     CGM_clearMap(virtualMap, xMax, yMax);
