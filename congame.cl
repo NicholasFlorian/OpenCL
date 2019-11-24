@@ -1,4 +1,4 @@
-__kernel void CGM_update(__global int** virtualMap, __global int** updateMap){
+__kernel void CGM_update(__global int* virtualMap[24], __global int* updateMap[24]){
 
     // index variables for OpenCL assignment
     int x;
@@ -6,7 +6,7 @@ __kernel void CGM_update(__global int** virtualMap, __global int** updateMap){
 
     // variables 
     int count; 
-    int matrix[8][2];
+    int matrix[8][2] {{-1,-1}, { 0,-1}, { 1,-1}, {-1, 0}, { 1, 0}, {-1, 1}, { 0, 1}, { 1, 1}};
     
     
     // assign
@@ -14,9 +14,6 @@ __kernel void CGM_update(__global int** virtualMap, __global int** updateMap){
     y = get_global_id(1);
 
     count = 0;
-
-    // create the checking matrix
-    matrix = {{-1,-1}, { 0,-1}, { 1,-1}, {-1, 0}, { 1, 0}, {-1, 1}, { 0, 1}, { 1, 1}};
 
 
     // count how many neighbors are populated
@@ -49,10 +46,10 @@ __kernel void CGM_update(__global int** virtualMap, __global int** updateMap){
     }
 
     // update the value based on the count
-    if(virtualMap[x][y] == CGM_OCCUPIED && 2 <= count && count <= 3)
-        updateMap[x][y] = CGM_OCCUPIED;
-    else if(virtualMap[x][y] == CGM_EMPTIED && count == 3)
-        updateMap[x][y] = CGM_OCCUPIED;
+    if(virtualMap[x][y] == 1 && 2 <= count && count <= 3)
+        updateMap[x][y] = 1;
+    else if(virtualMap[x][y] == 0 && count == 3)
+        updateMap[x][y] = 1;
     else
-        updateMap[x][y] = CGM_EMPTIED;
+        updateMap[x][y] = 0;
 }

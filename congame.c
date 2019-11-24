@@ -173,9 +173,6 @@ cl_device_id create_device() {
     if(err == CL_DEVICE_NOT_FOUND) {
         err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
     }
-    if(err == CL_DEVICE_NOT_FOUND) {
-        err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
-    }
     if(err < 0) {
         perror("Couldn't access any devices");
         exit(1);   
