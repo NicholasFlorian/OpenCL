@@ -29,7 +29,7 @@
 
 // rendering data
 // global constants
-#define CGM_DELAY           50000 * 4
+#define CGM_DELAY           50000 * 20
 #define CGM_STR_OCCUPIED    "x"
 #define CGM_STR_EMPTIED     " "
 
@@ -365,7 +365,7 @@ int main(int argc, char *argv[]) {
     
 
     // prefrom 2000 iterations
-    for(int i = 0; i < 2000; i++){
+    for(int i = 0; i < 4; i++){
         
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
@@ -415,6 +415,9 @@ int main(int argc, char *argv[]) {
             }
         }
         
+        CGM_drawMap(virtualMap, xMax, yMax);
+        CGM_drawMap(updateMap, xMax, yMax);
+        CGM_drawMap(virtualMap, xMax, yMax);
         CGM_drawMap(updateMap, xMax, yMax);
         clFinish(queue);
     }
