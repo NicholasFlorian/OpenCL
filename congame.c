@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
     cl_kernel           kernel;
     cl_command_queue    queue;
     cl_int              err;
-    size_t              globalSize[2] = {1,1}; // 6 kernals
+    size_t              globalSize[2] = {24,24}; // 6 kernals
     size_t              localSize[2] = {1,1};
 
     // OpenCL buffers
@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
     virtualMapBuffer = clCreateBuffer(
         context, 
         CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
-        sizeof(int*) * xMax, 
+        sizeof(int*) * xMax * yMax, 
         virtualMap, 
         &err);
     if(err < 0) {
@@ -313,7 +313,7 @@ int main(int argc, char *argv[]) {
     updateMapBuffer = clCreateBuffer(
         context, 
         CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, 
-        sizeof(int*) * xMax, 
+        sizeof(int*) * xMax * yMax, 
         updateMap, 
         &err);
     if(err < 0) {
