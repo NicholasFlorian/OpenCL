@@ -29,7 +29,7 @@
 
 // rendering data
 // global constants
-#define CGM_DELAY           50000 * 20
+#define CGM_DELAY           50000
 #define CGM_STR_OCCUPIED    "x"
 #define CGM_STR_EMPTIED     " "
 
@@ -438,11 +438,13 @@ int main(int argc, char *argv[]) {
                 virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
             }
         }
+
         
         if(doOutput)
             CGM_drawMap(virtualMap, xMax, yMax);
         else
             CGM_drawArray(virtualMap);
+
     }
 
 
