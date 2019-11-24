@@ -321,7 +321,7 @@ int main(int argc, char *argv[]) {
     virtualMapBuffer = clCreateBuffer(
         context, 
         CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
-        sizeof(int*) * xMax * yMax, 
+        sizeof(int) * xMax * yMax, 
         virtualMap, 
         &err);
     if(err < 0) {
@@ -332,7 +332,7 @@ int main(int argc, char *argv[]) {
     updateMapBuffer = clCreateBuffer(
         context, 
         CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, 
-        sizeof(int*) * xMax * yMax, 
+        sizeof(int) * xMax * yMax, 
         updateMap, 
         &err);
     if(err < 0) {
