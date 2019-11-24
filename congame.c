@@ -393,7 +393,7 @@ int main(int argc, char *argv[]) {
             updateMapBuffer, 
             CL_TRUE, 
             0, 
-            sizeof(int*) * xMax, 
+            sizeof(int*) * xMax * yMax, 
             updateMap, 
             0, 
             NULL, 
