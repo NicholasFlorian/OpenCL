@@ -408,6 +408,7 @@ int main(int argc, char *argv[]) {
         }
 
 
+        clFinish(queue);
         
         for(int x = 0; x < xMax; x++) {
         
@@ -419,7 +420,7 @@ int main(int argc, char *argv[]) {
         
         CGM_drawMap(virtualMap, xMax, yMax);
     
-        clFinish(queue);
+        
     }
 
 
