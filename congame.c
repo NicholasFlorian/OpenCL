@@ -29,7 +29,7 @@
 
 // rendering data
 // global constants
-#define CGM_DELAY           50000
+#define CGM_DELAY           50
 #define CGM_STR_OCCUPIED    "x"
 #define CGM_STR_EMPTIED     " "
 
