@@ -1,4 +1,4 @@
-PROJ=congame
+PROJ=a4
 
 CC=gcc
 
