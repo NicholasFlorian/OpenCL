@@ -284,7 +284,7 @@ int main(int argc, char *argv[]) {
     // ncurses variables
     int                 doOutput;
 
-    doOutput = 0;
+    doOutput = 1;
     kernalSize = 1;
 
 
@@ -446,10 +446,10 @@ int main(int argc, char *argv[]) {
 
 
         // output
-        if(doOutput)
-            CGM_drawMap(virtualMap, xMax, yMax);
-        else
-            CGM_drawArray(virtualMap);
+       
+        CGM_drawMap(virtualMap, xMax, yMax);
+        
+        //    CGM_drawArray(virtualMap);
     }
 
 
