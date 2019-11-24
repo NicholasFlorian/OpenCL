@@ -160,11 +160,19 @@ void CGM_drawMap(int* map, int xMax, int yMax){
 void CGM_drawArray(int* map){
 
 
-    for(int i = 0; i < (24 * 24); i++){
+    for(int x = 0; x < xMax; x++){
+        
+        for(int y = 0; y < yMax; y++){
+            
+            if(map[(x * 24) + y])
+                printf("x ");
+            else
+                printf("  ");
 
-        printf("%d, ", map[i]);
-
+        }
+        printf("\n");
     }
+
     printf("\n");
 }
 
@@ -276,7 +284,7 @@ int main(int argc, char *argv[]) {
     // ncurses variables
     int                 doOutput;
 
-    doOutput = 1;
+    doOutput = 0;
     kernalSize = 1;
 
 
@@ -387,7 +395,6 @@ int main(int argc, char *argv[]) {
         curs_set(FALSE);
         getmaxyx(stdscr, CurrentY, CurrentX);
     }
-    
 
     // prefrom 2000 iterations, if if using ncurses until the user hits q
     for(int i = 0; i < 1000; i++){
@@ -395,7 +402,6 @@ int main(int argc, char *argv[]) {
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
-å
         /* Enqueue kernel */
         err = clEnqueueNDRangeKernel(
             queue, 
@@ -433,20 +439,17 @@ int main(int argc, char *argv[]) {
 
         clFinish(queue);
 
-        for(int x = 0; x < xMax; x++) {
-
-            for(int y = 0; y < yMax; y++) {
-            
+        // display
+        for(int x = 0; x < xMax; x++)
+            for(int y = 0; y < yMax; y++)
                 virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
-            }
-        }
 
-        
+
+        // output
         if(doOutput)
             CGM_drawMap(virtualMap, xMax, yMax);
         else
             CGM_drawArray(virtualMap);
-
     }
 
 
