@@ -146,6 +146,9 @@ void CGM_randomizeMap(int* map, int xMax, int yMax){
 
 void CGM_drawMap(int* map, int xMax, int yMax){
 
+    // variables
+    int c;
+
     // update max screen size
     getmaxyx(stdscr, CurrentY, CurrentX);
 
@@ -165,6 +168,13 @@ void CGM_drawMap(int* map, int xMax, int yMax){
     // refresh and delay
     refresh();
     sleep(1);
+
+    // read keyboard and exit if 'q' pressed
+    c = getch();
+    if (c == 'q')
+        return 0;
+    else
+        return 1;
 }
 
 void CGM_drawArray(int* map){
@@ -353,10 +363,9 @@ int main(int argumentSize, char* argumentArray[]) {
     int                 doOutput;
 
 
-    // false by default
-    doOutput = 0;
-    kernalSize = 1;
-
+    
+    doOutput = 0;   // false by default
+    kernalSize = 1; // one by default
 
     // handle arguments
     for(int i = 1; i < argumentSize; i++){
@@ -370,7 +379,7 @@ int main(int argumentSize, char* argumentArray[]) {
         }
         else if(strcmp(argumentArray[i], "-o") == 0){
             
-            doOutput = 0;
+            doOutput = 1;
         }
         else{
 
@@ -379,8 +388,6 @@ int main(int argumentSize, char* argumentArray[]) {
             exit(1);
         }
     }
-
-
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -490,8 +497,13 @@ int main(int argumentSize, char* argumentArray[]) {
     }
 
     // prefrom 2000 iterations, if if using ncurses until the user hits q
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < 1000 || doOutput; i++){
         
+        // variables
+        int check;
+
+        check = 1;
+
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
@@ -539,8 +551,9 @@ int main(int argumentSize, char* argumentArray[]) {
 
 
         // output
-        CGM_drawMap(virtualMap, xMax, yMax);
-        //CGM_drawArray(virtualMap);
+        check = CGM_drawMap(virtualMap, xMax, yMax);
+        if(!check)
+            break;
     }
 
 
