@@ -419,7 +419,7 @@ int main(int argc, char *argv[]) {
         CGM_drawMap(updateMap, xMax, yMax);
         CGM_drawMap(virtualMap, xMax, yMax);
         CGM_drawMap(updateMap, xMax, yMax);
-        clFinish(queue);
+        //clFinish(queue);
     }
 
 
