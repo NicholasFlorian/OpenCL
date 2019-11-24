@@ -151,7 +151,7 @@ void CGM_drawMap(int** map, int xMax, int yMax){
 
     // refresh and delay
     refresh();
-    usleep(CGM_DELAY);
+    sleep(CGM_DELAY);
 }
 
 cl_device_id create_device() {
