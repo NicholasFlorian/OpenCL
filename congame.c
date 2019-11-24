@@ -154,6 +154,17 @@ void CGM_drawMap(int* map, int xMax, int yMax){
     sleep(CGM_DELAY);
 }
 
+void CGM_drawArray(int* map){
+
+
+    for(int i = 0; i < (24 * 24); i++){
+
+        printf("%d, ", map[i]);
+
+    }
+    printf("\n")
+}
+
 cl_device_id create_device() {
 
         
@@ -245,8 +256,9 @@ int main(int argc, char *argv[]) {
     cl_kernel           kernel;
     cl_command_queue    queue;
     cl_int              err;
+    size_t              kernalSize;
     size_t              globalSize[2] = {24,24}; // 6 kernals
-    size_t              localSize[2] = {1,1};
+    size_t              localSize[2] = {24,24};
 
     // OpenCL buffers
     cl_mem              virtualMapBuffer; 
@@ -258,6 +270,14 @@ int main(int argc, char *argv[]) {
     int                 xMax;
     int                 yMax;
 
+    // ncurses variables
+    int                 doOutput;
+
+    doOutput = 0;
+    kernalSize = 1;
+
+
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -268,7 +288,6 @@ int main(int argc, char *argv[]) {
 
     // allocate memory for our arrays
     virtualMap = malloc(sizeof(int*) * xMax * yMax);
-
     updateMap = malloc(sizeof(int*) * xMax * yMax);
 
     // create an empty map and randomly fill it up
@@ -343,34 +362,36 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+    err =  clSetKernelArg(kernel, 0, sizeof(cl_mem), &virtualMapBuffer);
+    err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &updateMapBuffer);
+    if(err < 0) {
+
+        perror("Couldn't create a kernel argument");
+        exit(1);
+    }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // initialize ncurses
     // global var `stdscr` is created by the call to `initscr()`
-    initscr();
-    noecho();
-    cbreak();
-    timeout(0);
-    curs_set(FALSE);
-    getmaxyx(stdscr, CurrentY, CurrentX); 
+    if(doOutput){
+
+        initscr();
+        noecho();
+        cbreak();
+        timeout(0);
+        curs_set(FALSE);
+        getmaxyx(stdscr, CurrentY, CurrentX);
+    }
     
 
-    // prefrom 2000 iterations
-    for(int i = 0; i < 1; i++){
+    // prefrom 2000 iterations, if if using ncurses until the user hits q
+    for(int i = 0; i < 1000 || doOutput; i++){
         
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
-
-        err =  clSetKernelArg(kernel, 0, sizeof(cl_mem), &virtualMapBuffer);
-        err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &updateMapBuffer);
-        if(err < 0) {
-
-            perror("Couldn't create a kernel argument");
-            exit(1);
-        }
 
         /* Enqueue kernel */
         err = clEnqueueNDRangeKernel(
@@ -411,21 +432,24 @@ int main(int argc, char *argv[]) {
         clFinish(queue);
 
         for(int x = 0; x < xMax; x++) {
-        
+
             for(int y = 0; y < yMax; y++) {
             
                 virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
             }
         }
         
-        CGM_drawMap(virtualMap, xMax, yMax);
-    
-        
+        if(doOutput)
+            CGM_drawMap(virtualMap, xMax, yMax);
+        else
+            CGM_drawArray(virtualMap);
     }
 
 
     // end ncurses
-    endwin();
+    if(doOutput)
+        endwin();
+
 
     // free 
     clReleaseKernel(kernel);
