@@ -390,12 +390,12 @@ int main(int argc, char *argv[]) {
     
 
     // prefrom 2000 iterations, if if using ncurses until the user hits q
-    for(int i = 0; i < 1000 || doOutput; i++){
+    for(int i = 0; i < 1000; i++){
         
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
-
+å
         /* Enqueue kernel */
         err = clEnqueueNDRangeKernel(
             queue, 
@@ -430,7 +430,6 @@ int main(int argc, char *argv[]) {
             //endwin();
             exit(1);
         }
-
 
         clFinish(queue);
 
