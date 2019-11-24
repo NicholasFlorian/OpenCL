@@ -259,7 +259,7 @@ cl_program CGM_buildProgram(cl_context ctx, cl_device_id dev, const char* filena
     
     int         err;
     char*       errorString;
-    size_t      errorLength = 0
+    size_t      errorLength = 0;
 
 
     // open the file
