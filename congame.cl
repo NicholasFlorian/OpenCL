@@ -46,10 +46,10 @@ __kernel void CGM_update(__global int* virtualMap, __global int* updateMap){
     }
 
     // update the value based on the count
-    if(virtualMap[x][y] == 1 && 2 <= count && count <= 3)
-        updateMap[x][y] = 1;
-    else if(virtualMap[x][y] == 0 && count == 3)
-        updateMap[x][y] = 1;
+    if(virtualMap[(x * 24) + y] == 1 && 2 <= count && count <= 3)
+        updateMap[(x * 24) + y] = 1;
+    else if(virtualMap[(x * 24) + y] == 0 && count == 3)
+        updateMap[(x * 24) + y] = 1;
     else
-        updateMap[x][y] = 0;
+        updateMap[(x * 24) + y] = 0;
 }
