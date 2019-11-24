@@ -21,7 +21,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // OpenCL
-#define PROGRAM_FILE        "./congame.cl"
+#define FILE                "congame.cl"
 #define KERNEL_FUNC         "CGM_update"
 
 
@@ -297,7 +297,7 @@ int main(int argc, char *argv[]) {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // build program
-    program = build_program(context, device, PROGRAM_FILE);
+    program = build_program(context, device, "congame.cl");
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
