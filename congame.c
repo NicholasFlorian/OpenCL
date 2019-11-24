@@ -356,12 +356,12 @@ int main(int argc, char *argv[]) {
 
     // initialize ncurses
     // global var `stdscr` is created by the call to `initscr()`
-   /* initscr();
+    initscr();
     noecho();
     cbreak();
     timeout(0);
     curs_set(FALSE);
-    getmaxyx(stdscr, CurrentY, CurrentX); */
+    getmaxyx(stdscr, CurrentY, CurrentX); 
     
 
     // prefrom 2000 iterations
@@ -406,7 +406,7 @@ int main(int argc, char *argv[]) {
 
 
         // clear the map to start
-        //CGM_drawMap(virtualMap, xMax, yMax);
+        CGM_drawMap(virtualMap, xMax, yMax);
     }
 
 
