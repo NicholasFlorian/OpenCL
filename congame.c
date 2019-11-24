@@ -409,7 +409,7 @@ int main(int argc, char *argv[]) {
 
 
         clFinish(queue);
-        
+
         for(int x = 0; x < xMax; x++) {
         
             for(int y = 0; y < yMax; y++) {
@@ -425,7 +425,7 @@ int main(int argc, char *argv[]) {
 
 
     // end ncurses
-    //endwin();
+    endwin();
 
     // free 
     clReleaseKernel(kernel);
