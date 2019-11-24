@@ -162,7 +162,7 @@ void CGM_drawArray(int* map){
         printf("%d, ", map[i]);
 
     }
-    printf("\n")
+    printf("\n");
 }
 
 cl_device_id create_device() {
