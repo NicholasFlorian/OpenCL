@@ -246,7 +246,7 @@ int main(int argc, char *argv[]) {
     cl_command_queue    queue;
     cl_int              err;
     size_t              globalSize[2] = {24,24}; // 6 kernals
-    size_t              localSize[2] = {1,1};
+    size_t              localSize[2] = {6,6};
 
     // OpenCL buffers
     cl_mem              virtualMapBuffer; 

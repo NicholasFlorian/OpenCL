@@ -42,7 +42,7 @@ __kernel void CGM_update(__global int* virtualMap, __global int* updateMap){
 
         // count up
         if(flag)
-            count+=matrix[xNew][yNew];
+            count+=virtualMap[(xNew * 24) + yNew];
     }
 
     // update the value based on the count
