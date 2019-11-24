@@ -44,6 +44,9 @@
     source_str = (char*)malloc(MAX_SOURCE_SIZE);
     source_size = fread(source_str, 1, MAX_SOURCE_SIZE, fp);
     fclose(fp);
+
+
+    
      
     /* Get Platform and Device Info */
     ret = clGetPlatformIDs(1, &platform_id, &ret_num_platforms);
