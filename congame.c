@@ -97,7 +97,7 @@ void CGM_clearMap(int* map, int xMax, int yMax){
     // go through the entire map and assign all values to 0;
     for(int x = 0; x < xMax; x++)
         for(int y = 0; y < yMax; y++)
-            map[(xPos * 24) + yPos] = CGM_EMPTIED;  // assign to 0
+            map[(x * 24) + y] = CGM_EMPTIED;  // assign to 0
 }
 
 void CGM_randomizeMap(int* map, int xMax, int yMax){
@@ -108,10 +108,10 @@ void CGM_randomizeMap(int* map, int xMax, int yMax){
         for(int y = 0; y < yMax; y++) {
 
             // 17% chance the result is a 1
-            map[(xPos * 24) + yPos] = (rand() % 100) < 17; 
+            map[(x * 24) + y] = (rand() % 100) < 17; 
             
             // if it is a 1, let there be a 35% that the neighbor is a 1
-            if(map[(xPos * 24) + yPos]) {
+            if(map[(x * 24) + y]) {
 
                 // go through each neighbor
                 /***TODO for(int i = 0; i < MATRIX_SIZE; i++) {
