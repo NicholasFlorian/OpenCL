@@ -370,6 +370,7 @@ int main(int argc, char *argv[]) {
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
+        CGM_drawMap(virtualMap, xMax, yMax);
        /* Enqueue kernel */
         err = clEnqueueNDRangeKernel(
             queue, 
@@ -413,9 +414,8 @@ int main(int argc, char *argv[]) {
                 virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
             }
         }
-
-        CGM_drawMap(virtualMap, xMax, yMax);
         
+        CGM_drawMap(updateMap, xMax, yMax);
         clFinish(queue);
     }
 
