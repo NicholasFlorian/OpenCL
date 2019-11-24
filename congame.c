@@ -365,8 +365,7 @@ int main(int argc, char *argv[]) {
     
 
     // prefrom 2000 iterations
-    /*for(int i = 0; i < 2000; i++) */
-    //{
+    for(int i = 0; i < 2000; i++){
         
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
@@ -408,7 +407,7 @@ int main(int argc, char *argv[]) {
 
         // clear the map to start
         CGM_drawMap(virtualMap, xMax, yMax);
-    //}
+    }
 
 
     // end ncurses
