@@ -119,7 +119,7 @@ void CGM_randomizeMap(int* map, int xMax, int yMax){
     
                     // variables
                     int xNew;
-                    iny yNew;
+                    int16_t yNew;
 
 
                     // assign
@@ -144,7 +144,7 @@ void CGM_randomizeMap(int* map, int xMax, int yMax){
     }
 }
 
-void CGM_drawMap(int* map, int xMax, int yMax){
+int CGM_drawMap(int* map, int xMax, int yMax){
 
     // variables
     int c;
@@ -203,19 +203,20 @@ void CGM_drawArray(int* map){
 cl_device_id CGM_createDevice() {
 
     // variables
-    cl_uint         platformCount
+    cl_uint         platformCount;
     cl_platform_id  platform;
     cl_device_id    device;
     int             err;
 
-    /* Identify a platform */
+    // identify a platform
+    platfromCount = NULL;
     err = clGetPlatformIDs(1, &platform, &platformCount);
     if(err < 0) {
         perror("Couldn't identify a platform");
         exit(1);
     } 
 
-    /* Access a device */
+    // access a device
     err = clGetDeviceIDs(
         platform, 
         CL_DEVICE_TYPE_GPU, 
@@ -244,7 +245,7 @@ cl_device_id CGM_createDevice() {
         exit(1);   
     }
 
-    return dev;
+    return device;
 }
 
 cl_program CGM_buildProgram(cl_context ctx, cl_device_id dev, const char* filename) {
@@ -274,9 +275,9 @@ cl_program CGM_buildProgram(cl_context ctx, cl_device_id dev, const char* filena
     fseek(file, OFFSET, SEEK_SET);
 
     // read the file,
-    string = (char*)malloc(programLength + 1);
-    fread(string, sizeof(char), programLength, file);
-    string[programLength] = '\0';
+    programString = (char*)malloc(programLength + 1);
+    fread(programString, sizeof(char), programLength, file);
+    programString[programLength] = '\0';
     if(programString[0] == '\0'){
 
         perror("Couldn't read the program file");

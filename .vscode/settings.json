@@ -4,6 +4,8 @@
         "algorithm": "c",
         "bitset": "c",
         "chrono": "c",
-        "unordered_map": "c"
+        "unordered_map": "c",
+        "string": "c",
+        "iosfwd": "c"
     }
 }
