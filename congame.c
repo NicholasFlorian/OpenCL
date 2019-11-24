@@ -156,28 +156,33 @@ void CGM_drawMap(int** map, int xMax, int yMax){
 
 cl_device_id create_device() {
 
-   cl_platform_id platform;
-   cl_device_id dev;
-   int err;
+        
+    cl_platform_id platform;
+    cl_uint ret_num_devices;
+    cl_device_id dev;
+    int err;
 
-   /* Identify a platform */
-   err = clGetPlatformIDs(1, &platform, NULL);
-   if(err < 0) {
-      perror("Couldn't identify a platform");
-      exit(1);
-   } 
+    /* Identify a platform */
+    err = clGetPlatformIDs(1, &platform, &ret_num_platforms);
+    if(err < 0) {
+        perror("Couldn't identify a platform");
+        exit(1);
+    } 
 
-   /* Access a device */
-   err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
-   if(err == CL_DEVICE_NOT_FOUND) {
-      err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
-   }
-   if(err < 0) {
-      perror("Couldn't access any devices");
-      exit(1);   
-   }
+    /* Access a device */
+    err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, &ret_num_devices);
+    if(err == CL_DEVICE_NOT_FOUND) {
+        err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, &ret_num_devices);
+    }
+    if(err == CL_DEVICE_NOT_FOUND) {
+        err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_DEFAULT, 1, &dev, &ret_num_devices);
+    }
+    if(err < 0) {
+        perror("Couldn't access any devices");
+        exit(1);   
+    }
 
-   return dev;
+    return dev;
 }
 
 /* Create program from a file and compile it */
