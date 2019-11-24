@@ -1,0 +1,121 @@
+Assignment 4 - OpenCL
+---------------------
+Due Friday, November 22, 2018
+
+Write an OpenCL program that implements Conways' game of life.
+
+Your program should run between one and six kernels. The number of kernels
+is defined by the user on the command line.
+
+The program should have the option to print each generation of the game
+to the screen using ncurses. 
+
+Do not perform all calculations in global memory. Use local or private memory
+for temporary calculations. Don't needlessly pass information between
+the kernel and the application. 
+
+You do not need to run any timing tests for this assignment.
+
+Conway's Game of Life
+---------------------
+It is a cellular automata that runs on a two dimensional board. It follows a
+simple set of rules to create complex patterns. You can read about it here:
+	https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life	
+and you can see a demo of it running here:
+	https://copy.sh/life/
+
+The board is randomly initialized. Each square will have a probability
+of being occupied when the game starts. Pick a probability that tends
+to work well when you test it. 
+
+The board will be 24 by 24 cells.
+
+The rules for the game are based on how many neighbours are adjacent to
+each cell (square) on the board.  There are potentially eight neighbours
+for each cell (up, down, left, right, and four diagonals). There are fewer
+neighbours along the edges of the board. The edges are counted as empty
+squares.
+
+In each generation a new pattern is created on the board. The new generation
+is based on the pattern of the old generation.
+
+The rules can be summarized as:
+	-a cell with two or three neighbours is copied to the next generation
+	-an empty cell with three neighbours is occupied in the next generation
+	-all other cells are emptied on the next generation
+
+You will need two boards to play the game. These will be arrays. The current
+board and the board used to store the next generation. Your program
+should alternate between the two boards. You should not need to copy the
+contents of the new  board onto the old board. Your C/C++ program should
+alternate between the two boards without needing to copy the contents.
+Similarly, the CL program should not copy the contents of the finished board 
+
+In other words, the program should use one board as the input to the algorithm
+and store the output in the other board. For the next generation, the operations
+that the boards are used for should flip. The output board from the last
+generation becomes the input for the current generation. 
+
+Command Line Arguments
+----------------------
+The command line arguments are:
+
+  -n #   -indicates the number of kernels to use, the # should be 1 to 6
+  -o     -indicates that the output should not be displayed for each turn in the game
+
+The default number of kernels is 2.
+
+If the -o flag is not used then the program should display the results using
+ncurses.
+
+
+OpenCL
+------
+The program must run on the linux.socs.uoguelph.ca server. Use oclgrind
+to run the OpenCL emulator. Run your compiled C/C++ program which will
+run the OpenCL kernel using:
+	oclgrind ./a4 <-o> <-n #>
+
+
+
+Documentation
+-------------
+Include a readme.txt contains your name and student number. If anything
+does not work correctly then include a description of the problem
+in the readme.txt file.
+
+
+Coding Practices
+----------------
+Write the code using standard stylistic practices. Use functions, 
+reasonable variable names, and consistent indentation.
+If the code is difficult for the TA to understand then you
+will lose marks.
+
+As usual, keep backups of your work using source control software.
+
+
+Submitting the Assignment
+-------------------------
+Submit the assignment using Courselink. Submit only the source code,
+readme.txt, and the makefile. Bundle the code in a tar file.
+
+The assignments will be marked on the linux.soc.uoguelph.cas server using
+oclgrind.  If you develop your code on a different platform then it is a good
+idea to put the include files in an #ifdef for that system
+so they will still compile on the server. Test your program on the
+linux.socs.uoguelph.ca server.
+
+The TA will unpack your code and type "make". They will then try to
+run executables named a4 using:
+	 oclgrind ./a4
+with various command line arguments. If the makefile is missing, the
+make command does not work, or the program does not execute then you will lose
+a substantial number of marks.
+
+It is always a good idea to unpack and test the file you are submitting
+to be sure that what you submit actually compiles. 
+
+If there is no ncurses interface then the program should run for 1000
+generations before exiting. If there is an interface then the program 
+should exit when 'q' is pressed.
