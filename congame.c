@@ -21,7 +21,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // OpenCL
-#define PROGRAM_FILE        "congame.cl"
+#define PROGRAM_FILE        "./congame.cl"
 #define KERNEL_FUNC         "CGM_update"
 
 
