@@ -29,7 +29,7 @@
 
 // rendering data
 // global constants
-#define CGM_DELAY           50
+#define CGM_DELAY           5
 #define CGM_STR_OCCUPIED    "x"
 #define CGM_STR_EMPTIED     " "
 
@@ -154,7 +154,7 @@ void CGM_drawMap(int* map, int xMax, int yMax){
 
     // refresh and delay
     refresh();
-    sleep(CGM_DELAY);
+    usleep(CGM_DELAY);
 }
 
 void CGM_drawArray(int* map){
