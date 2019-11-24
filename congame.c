@@ -398,6 +398,7 @@ int main(int argc, char *argv[]) {
             0, 
             NULL, 
             NULL);   
+
         if(err < 0) {
             perror("Couldn't read the buffer");
             //endwin();
@@ -415,6 +416,7 @@ int main(int argc, char *argv[]) {
 
         CGM_drawMap(virtualMap, xMax, yMax);
         
+        clFinish(queue);
     }
 
 
