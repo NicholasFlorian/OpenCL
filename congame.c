@@ -343,13 +343,6 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    err =  clSetKernelArg(kernel, 0, sizeof(cl_mem), &virtualMapBuffer);
-    err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &updateMapBuffer);
-    if(err < 0) {
-
-        perror("Couldn't create a kernel argument");
-        exit(1);
-    }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -365,12 +358,21 @@ int main(int argc, char *argv[]) {
     
 
     // prefrom 2000 iterations
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < 1; i++){
         
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
-       /* Enqueue kernel */
+
+        err =  clSetKernelArg(kernel, 0, sizeof(cl_mem), &virtualMapBuffer);
+        err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &updateMapBuffer);
+        if(err < 0) {
+
+            perror("Couldn't create a kernel argument");
+            exit(1);
+        }
+
+        /* Enqueue kernel */
         err = clEnqueueNDRangeKernel(
             queue, 
             kernel, 
@@ -407,19 +409,17 @@ int main(int argc, char *argv[]) {
 
 
         
-        //for(int x = 0; x < xMax; x++) {
+        for(int x = 0; x < xMax; x++) {
         
-        //    for(int y = 0; y < yMax; y++) {
+            for(int y = 0; y < yMax; y++) {
             
-        //        virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
-        //    }
-        //}
+                virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
+            }
+        }
         
         CGM_drawMap(virtualMap, xMax, yMax);
-        CGM_drawMap(updateMap, xMax, yMax);
-        CGM_drawMap(virtualMap, xMax, yMax);
-        CGM_drawMap(updateMap, xMax, yMax);
-        //clFinish(queue);
+    
+        clFinish(queue);
     }
 
 
