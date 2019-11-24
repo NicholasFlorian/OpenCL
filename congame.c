@@ -5,6 +5,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <ncurses.h>
+#include <curses.h>
 
 // provide version of OpenCL to use
 #define CL_TARGET_OPENCL_VERSION 220
@@ -380,8 +381,8 @@ int main(int argc, char *argv[]) {
             kernel, 
             2, 
             NULL, 
-            &globalSize, 
-            &localSize, 
+            globalSize, 
+            localSize, 
             0, 
             NULL, 
             NULL); 
@@ -416,10 +417,10 @@ int main(int argc, char *argv[]) {
     endwin();
 
     // free 
-   clReleaseKernel(kernel);
-   clReleaseMemObject(virtualMapBuffer);
-   clReleaseMemObject(updateMapBuffer);
-   clReleaseCommandQueue(queue);
-   clReleaseProgram(program);
-   clReleaseContext(context);
+    clReleaseKernel(kernel);
+    clReleaseMemObject(virtualMapBuffer);
+    clReleaseMemObject(updateMapBuffer);
+    clReleaseCommandQueue(queue);
+    clReleaseProgram(program);
+    clReleaseContext(context);
 }
