@@ -143,7 +143,7 @@ void CGM_drawMap(int* map, int xMax, int yMax){
     // go through the entire map and print evey
     for(int x = 0; x < xMax; x++)
         for(int y = 0; y < yMax; y++)
-            if(map[(xPos * 24) + yPos] == CGM_OCCUPIED) // print out populations
+            if(map[(x * 24) + y] == CGM_OCCUPIED) // print out populations
                 mvprintw(y, x * 2, CGM_STR_OCCUPIED);
             else
                 mvprintw(y, x * 2, CGM_STR_EMPTIED);
