@@ -21,7 +21,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // OpenCL
-#define FILE                "congame.cl"
+#define FILE_NAME           "congame.cl"
 #define KERNEL_FUNC         "CGM_update"
 
 
@@ -242,7 +242,6 @@ cl_program build_program(cl_context ctx, cl_device_id dev, const char* filename)
 int main(int argc, char *argv[]) {
 
     // OpenCL structures
-    cl_platform_id      platform;
     cl_device_id        device;
     cl_context          context;
     cl_program          program;
