@@ -140,6 +140,9 @@ void CGM_drawMap(int* map, int xMax, int yMax){
     getmaxyx(stdscr, CurrentY, CurrentX);
 
 
+    // clear the ncurses
+    clear();
+
     // go through the entire map and print evey
     for(int x = 0; x < xMax; x++)
         for(int y = 0; y < yMax; y++)
