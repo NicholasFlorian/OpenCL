@@ -1,4 +1,4 @@
-__kernal void CGM_update(__global int** virtualMap, __global int** updateMap){
+__kernel void CGM_update(__global int** virtualMap, __global int** updateMap){
 
     // index variables for OpenCL assignment
     int x;
