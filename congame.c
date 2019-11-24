@@ -209,7 +209,7 @@ cl_device_id CGM_createDevice() {
     int             err;
 
     // identify a platform
-    platfromCount = NULL;
+    platformCount = NULL;
     err = clGetPlatformIDs(1, &platform, &platformCount);
     if(err < 0) {
         perror("Couldn't identify a platform");
@@ -255,11 +255,11 @@ cl_program CGM_buildProgram(cl_context ctx, cl_device_id dev, const char* filena
     FILE        *file;
 
     char        *programString; 
-    int         programLength;
+    int         programLength = 0;
     
     int         err;
     char        *errorString;
-    int         errorLength;
+    int         errorLength = 0;
 
 
     // open the file
