@@ -409,8 +409,7 @@ int main(int argc, char *argv[]) {
         
             for(int y = 0; y < yMax; y++) {
             
-                virtualMap[x][y] = updateMap[x][y];
-
+                virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
             }
         }
 
