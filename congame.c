@@ -356,12 +356,12 @@ int main(int argc, char *argv[]) {
 
     // initialize ncurses
     // global var `stdscr` is created by the call to `initscr()`
-    initscr();
+   /* initscr();
     noecho();
     cbreak();
     timeout(0);
     curs_set(FALSE);
-    getmaxyx(stdscr, CurrentY, CurrentX); 
+    getmaxyx(stdscr, CurrentY, CurrentX); */
     
 
     // prefrom 2000 iterations
@@ -383,7 +383,7 @@ int main(int argc, char *argv[]) {
             NULL); 
         if(err < 0) {
             perror("Couldn't enqueue the kernel");
-            endwin();
+            //endwin();
             exit(1);
         }
 
@@ -400,18 +400,18 @@ int main(int argc, char *argv[]) {
             NULL);   
         if(err < 0) {
             perror("Couldn't read the buffer");
-            endwin();
+            //endwin();
             exit(1);
         }
 
 
         // clear the map to start
-        CGM_drawMap(virtualMap, xMax, yMax);
+        //CGM_drawMap(virtualMap, xMax, yMax);
     }
 
 
     // end ncurses
-    endwin();
+    //endwin();
 
     // free 
     clReleaseKernel(kernel);
