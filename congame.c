@@ -23,6 +23,7 @@
 // OpenCL
 #define FILE_NAME           "congame.cl"
 #define KERNEL_FUNC         "CGM_update"
+#define OFFSET              0
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -114,21 +115,30 @@ void CGM_randomizeMap(int* map, int xMax, int yMax){
             if(map[(x * 24) + y]) {
 
                 // go through each neighbor
-                /***TODO for(int i = 0; i < MATRIX_SIZE; i++) {
+                for(int i = 0; i < MATRIX_SIZE; i++) {
     
+                    // variables
+                    int xNew;
+                    iny yNew;
+
+
+                    // assign
+                    xNew = x + MATRIX[i][0];
+                    yNew = y + MATRIX[i][1];
+
                     // verify the location to prevent segfault...
                     if(CGM_checkPosition(
                         map,
                         xMax,
                         yMax,
-                        x + MATRIX[i][0], 
-                        y + MATRIX[i][1])){
+                        xNew, 
+                        yNew)){
 
                         // ...then apply the 35% chance
-                        map[x + MATRIX[i][0]][y + MATRIX[i][1]] = 
+                        map[(xNew * 24) + yNew] = 
                             (rand() % 100) < 35;
                     }
-                }*/
+                }
             }
         }
     }
@@ -154,7 +164,7 @@ void CGM_drawMap(int* map, int xMax, int yMax){
 
     // refresh and delay
     refresh();
-    usleep(CGM_DELAY);
+    sleep(1);
 }
 
 void CGM_drawArray(int* map){
@@ -176,25 +186,49 @@ void CGM_drawArray(int* map){
     printf("\n");
 }
 
-cl_device_id create_device() {
 
-        
-    cl_platform_id platform;
-    cl_device_id dev;
-    int err;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// open CL functions
+cl_device_id CGM_createDevice() {
+
+    // variables
+    cl_uint         platformCount
+    cl_platform_id  platform;
+    cl_device_id    device;
+    int             err;
 
     /* Identify a platform */
-    err = clGetPlatformIDs(1, &platform, NULL);
+    err = clGetPlatformIDs(1, &platform, &platformCount);
     if(err < 0) {
         perror("Couldn't identify a platform");
         exit(1);
     } 
 
     /* Access a device */
-    err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
-    if(err == CL_DEVICE_NOT_FOUND) {
-        err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
-    }
+    err = clGetDeviceIDs(
+        platform, 
+        CL_DEVICE_TYPE_GPU, 
+        1, 
+        &device, 
+        &platformCount);
+    
+    if(err == CL_DEVICE_NOT_FOUND) 
+        err = clGetDeviceIDs(
+            platform, 
+            CL_DEVICE_TYPE_CPU, 
+            1, 
+            &device, 
+            &platformCount);
+
+    if(err == CL_DEVICE_NOT_FOUND) 
+        err = clGetDeviceIDs(
+            platform, 
+            CL_DEVICE_TYPE_CPU, 
+            1, 
+            &device, 
+            &platformCount);
+
     if(err < 0) {
         perror("Couldn't access any devices");
         exit(1);   
@@ -203,62 +237,96 @@ cl_device_id create_device() {
     return dev;
 }
 
-/* Create program from a file and compile it */
-cl_program build_program(cl_context ctx, cl_device_id dev, const char* filename) {
+cl_program CGM_buildProgram(cl_context ctx, cl_device_id dev, const char* filename) {
 
-   cl_program program;
-   FILE *program_handle;
-   char *program_buffer, *program_log;
-   size_t program_size, log_size;
-   int err;
+    // variables
+    cl_program  program;
+    FILE        *file;
 
-   /* Read program file and place content into buffer */
-   program_handle = fopen(filename, "r");
-   if(program_handle == NULL) {
-      perror("Couldn't find the program file");
-      exit(1);
-   }
-   fseek(program_handle, 0, SEEK_END);
-   program_size = ftell(program_handle);
-   rewind(program_handle);
-   program_buffer = (char*)malloc(program_size + 1);
-   program_buffer[program_size] = '\0';
-   fread(program_buffer, sizeof(char), program_size, program_handle);
-   fclose(program_handle);
+    char        *programString; 
+    int         programLength;
+    
+    int         err;
+    char        *errorString;
+    int         errorLength;
 
-   /* Create program from file */
-   program = clCreateProgramWithSource(ctx, 1, 
-      (const char**)&program_buffer, &program_size, &err);
-   if(err < 0) {
-      perror("Couldn't create the program");
-      exit(1);
-   }
-   free(program_buffer);
 
-   /* Build program */
-   err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
-   if(err < 0) {
+    // open the file
+    file = fopen(filename, "r");
+    if(file == NULL) {
+        perror("Couldn't find the program file");
+        exit(1);
+    }
 
-      /* Find size of log and print to std output */
-      clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG, 
-            0, NULL, &log_size);
-      program_log = (char*) malloc(log_size + 1);
-      program_log[log_size] = '\0';
-      clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG, 
-            log_size + 1, program_log, NULL);
-      printf("%s\n", program_log);
-      free(program_log);
-      exit(1);
-   }
+    // get the size of the file
+    fseek(file, OFFSET, SEEK_END);
+    programLength = ftell(file);
+    fseek(file, OFFSET, SEEK_SET);
 
-   return program;
+    // read the file,
+    string = (char*)malloc(programLength + 1);
+    fread(string, sizeof(char), programLength, file);
+    string[programLength] = '\0';
+    if(programString[0] == '\0'){
+
+        perror("Couldn't read the program file");
+        exit(1);
+    }
+
+
+    // create hte program
+    program = clCreateProgramWithSource(ctx, 1, 
+        (const char**)&programString, 
+        &programLength, 
+        &err);
+    if(err < 0) {
+        perror("Couldn't create the program");
+        exit(1);
+    }
+
+    // build the program
+    err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
+    if(err < 0) {
+
+        // print out the errors
+        clGetProgramBuildInfo(
+            program, 
+            dev, 
+            CL_PROGRAM_BUILD_LOG, 
+            0, 
+            NULL, 
+            &errorLength);
+
+        errorString = malloc(errorLength + 1);
+        clGetProgramBuildInfo(
+            program, 
+            dev, 
+            CL_PROGRAM_BUILD_LOG, 
+            errorLength + 1, 
+            errorString, 
+            NULL);
+        errorString[errorLength] = '\0';
+
+        perror("COMPILATION FAILED");
+        printf("%s\n", errorString);
+        free(errorString);
+        exit(1);
+    }
+
+    // free the string
+    free(programString);
+
+    // after reading through the file, close it
+    fclose(file);
+
+    return program;
 }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // main function
-int main(int argc, char *argv[]) {
+int main(int argumentSize, char* argumentArray[]) {
 
     // OpenCL structures
     cl_device_id        device;
@@ -284,8 +352,33 @@ int main(int argc, char *argv[]) {
     // ncurses variables
     int                 doOutput;
 
-    doOutput = 1;
+
+    // false by default
+    doOutput = 0;
     kernalSize = 1;
+
+
+    // handle arguments
+    for(int i = 1; i < argumentSize; i++){
+
+        if(strcmp(argumentArray[i], "-n") == 0){
+
+            kernalSize = atoi(argumentArray[++i]);
+
+            localSize[0] = globalSize[0] / kernalSize;
+            localSize[1] = globalSize[1] / kernalSize;
+        }
+        else if(strcmp(argumentArray[i], "-o") == 0){
+            
+            doOutput = 0;
+        }
+        else{
+
+            // kill the program if arguments are invalid
+            printf("INVALIDE ARGUMENTS");
+            exit(1);
+        }
+    }
 
 
 
@@ -309,7 +402,7 @@ int main(int argc, char *argv[]) {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // create device and context, check for an error
-    device = create_device();
+    device = CGM_createDevice();
     context = clCreateContext(NULL, 1, &device, NULL, NULL, &err);
 
     if(err < 0) {
@@ -323,7 +416,7 @@ int main(int argc, char *argv[]) {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // build program
-    program = build_program(context, device, "congame.cl");
+    program = CGM_buildProgram(context, device, "congame.cl");
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -402,7 +495,7 @@ int main(int argc, char *argv[]) {
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
 
-        /* Enqueue kernel */
+        // queue up the kernal
         err = clEnqueueNDRangeKernel(
             queue, 
             kernel, 
@@ -419,7 +512,7 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
 
-        /* Read the kernel's output */
+        // get the buffer back
         err = clEnqueueReadBuffer(
             queue, 
             updateMapBuffer, 
@@ -439,17 +532,15 @@ int main(int argc, char *argv[]) {
 
         clFinish(queue);
 
-        // display
+        // copy
         for(int x = 0; x < xMax; x++)
             for(int y = 0; y < yMax; y++)
                 virtualMap[(x * 24) + y] = updateMap[(x * 24) + y];
 
 
         // output
-       
         CGM_drawMap(virtualMap, xMax, yMax);
-        
-        //    CGM_drawArray(virtualMap);
+        //CGM_drawArray(virtualMap);
     }
 
 
