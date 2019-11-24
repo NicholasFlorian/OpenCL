@@ -405,8 +405,17 @@ int main(int argc, char *argv[]) {
         }
 
 
-        // clear the map to start
+        for(int x = 0; x < xMax; x++) {
+        
+            for(int y = 0; y < yMax; y++) {
+            
+                virtualMap[x][y] = updateMap[x][y];
+
+            }
+        }
+
         CGM_drawMap(virtualMap, xMax, yMax);
+        
     }
 
 
