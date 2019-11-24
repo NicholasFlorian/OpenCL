@@ -160,9 +160,9 @@ void CGM_drawMap(int* map, int xMax, int yMax){
 void CGM_drawArray(int* map){
 
 
-    for(int x = 0; x < xMax; x++){
+    for(int x = 0; x < 24; x++){
         
-        for(int y = 0; y < yMax; y++){
+        for(int y = 0; y < 24; y++){
             
             if(map[(x * 24) + y])
                 printf("x ");
