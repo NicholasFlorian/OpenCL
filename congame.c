@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
     // ncurses variables
     int                 doOutput;
 
-    doOutput = 0;
+    doOutput = 1;
     kernalSize = 1;
 
 
