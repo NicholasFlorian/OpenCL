@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
     cl_kernel           kernel;
     cl_command_queue    queue;
     cl_int              err;
-    size_t              globalSize[1] = {6}; // 6 kernals
+    size_t              globalSize[2] = {1,1}; // 6 kernals
     size_t              localSize[2] = {24,24};
 
     // OpenCL buffers
@@ -366,7 +366,7 @@ int main(int argc, char *argv[]) {
 
     // prefrom 2000 iterations
     /*for(int i = 0; i < 2000; i++) */
-    {
+    //{
         
         // clear the map on each use
         CGM_clearMap(updateMap, xMax, yMax);
@@ -384,6 +384,7 @@ int main(int argc, char *argv[]) {
             NULL); 
         if(err < 0) {
             perror("Couldn't enqueue the kernel");
+            endwin();
             exit(1);
         }
 
@@ -400,13 +401,14 @@ int main(int argc, char *argv[]) {
             NULL);   
         if(err < 0) {
             perror("Couldn't read the buffer");
+            endwin();
             exit(1);
         }
 
 
         // clear the map to start
         CGM_drawMap(virtualMap, xMax, yMax);
-    }
+    //}
 
 
     // end ncurses
